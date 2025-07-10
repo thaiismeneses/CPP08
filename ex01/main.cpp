@@ -6,21 +6,22 @@
 /*   By: thfranco <thfranco@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:34:03 by thfranco          #+#    #+#             */
-/*   Updated: 2025/06/28 19:31:04 by thfranco         ###   ########.fr       */
+/*   Updated: 2025/07/09 22:49:30 by thfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Span.hpp"
-
 #include <iostream>
-#include <cstdlib>      // para rand()
-#include <ctime>        // para time()
+#include <stdlib.h>      // to rand()
+#include <time.h>        // to time()
+#include <vector>
+#include <list>
+#include <algorithm>
 #include "Span.hpp"
 
 int main()
 {
-	// Teste 1: uso básico
-	std::cout << "== Teste básico ==" << std::endl;
+	// Test 1: Using basic
+	std::cout << "== Basic Test ==" << std::endl;
 	try {
 		Span sp = Span(5);
 		sp.addNumber(6);
@@ -32,40 +33,74 @@ int main()
 		std::cout << "Shortest span: " << sp.shortestSpan() << std::endl;
 		std::cout << "Longest span: " << sp.longestSpan() << std::endl;
 	} catch (std::exception &e) {
-		std::cout << "Erro: " << e.what() << std::endl;
+		std::cout << "Error: " << e.what() << std::endl;
 	}
 
-	std::cout << "\n== Teste de limite ==" << std::endl;
+	std::cout << "\n== Limit Test ==" << std::endl;
 	try {
 		Span sp = Span(2);
 		sp.addNumber(1);
 		sp.addNumber(2);
-		sp.addNumber(3); // deve lançar exceção
+		sp.addNumber(3); // should throw an exception
 	} catch (std::exception &e) {
-		std::cout << "Erro: " << e.what() << std::endl;
+		std::cout << "Error: " << e.what() << std::endl;
 	}
 
-	std::cout << "\n== Teste de span com menos de dois elementos ==" << std::endl;
+	std::cout << "\n== Test of span with less than two elements ==" << std::endl;
 	try {
 		Span sp = Span(1);
 		sp.addNumber(42);
 		std::cout << "Shortest span: " << sp.shortestSpan() << std::endl; // deve lançar exceção
 	} catch (std::exception &e) {
-		std::cout << "Erro: " << e.what() << std::endl;
+		std::cout << "Error: " << e.what() << std::endl;
 	}
 
-	std::cout << "\n== Teste com 10.000 números aleatórios ==" << std::endl;
+	std::cout << "\n== Test with vector iterators ==" << std::endl;
+	try {
+		Span sp = Span(5);
+		std::vector<int> numbers;
+		numbers.push_back(2);
+		numbers.push_back(4);
+		numbers.push_back(6);
+		numbers.push_back(8);
+		numbers.push_back(10);
+
+		sp.addNumbers(numbers.begin(), numbers.end());
+		std::cout << "Shortest span: " << sp.shortestSpan() << std::endl;
+		std::cout << "Longest span: " << sp.longestSpan() << std::endl;
+	} catch (std::exception &e) {
+		std::cout << "Error: " << e.what() << std::endl;
+	}
+
+	std::cout << "\n== Test with list iterators ==" << std::endl;
+	try {
+		Span sp = Span(4);
+		std::list<int> numbers;
+		numbers.push_back(3);
+		numbers.push_back(9);
+		numbers.push_back(27);
+		numbers.push_back(81);
+
+		sp.addNumbers(numbers.begin(), numbers.end());
+		std::cout << "Shortest span: " << sp.shortestSpan() << std::endl;
+		std::cout << "Longest span: " << sp.longestSpan() << std::endl;
+	} catch (std::exception &e) {
+		std::cout << "Error: " << e.what() << std::endl;
+	}
+
+	std::cout << "\n== Test with 10.000 rand numbers using iterators ==" << std::endl;
 	try {
 		Span sp = Span(10000);
-		srand(time(NULL)); // inicializa aleatoriedade
+		std::vector<int> numbers(10000);
 
-		for (int i = 0; i < 10000; ++i)
-			sp.addNumber(rand());
+		srand(time(NULL));
+		std::generate(numbers.begin(), numbers.end(), rand);
+		sp.addNumbers(numbers.begin(), numbers.end());
 
 		std::cout << "Shortest span: " << sp.shortestSpan() << std::endl;
 		std::cout << "Longest span: " << sp.longestSpan() << std::endl;
 	} catch (std::exception &e) {
-		std::cout << "Erro: " << e.what() << std::endl;
+		std::cout << "Error: " << e.what() << std::endl;
 	}
 
 	return 0;
